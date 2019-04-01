@@ -110,6 +110,13 @@ PPSingletonM(AddressBookHandle)
         NSString *name = (__bridge_transfer NSString *)ABRecordCopyCompositeName(person);
         model.name = name.length > 0 ? name : @"无名氏" ;
         
+        if (name.length > 0) {
+            NSMutableString *mutableString = [NSMutableString stringWithString:name];
+            CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
+            NSString *pinyinString = [mutableString stringByFoldingWithOptions:NSDiacriticInsensitiveSearch locale:[NSLocale currentLocale]];
+            model.pinyin = pinyinString;
+        }
+        
         // 5.3获取头像数据
         NSData *imageData = (__bridge_transfer NSData *)ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
         model.headerImage = [UIImage imageWithData:imageData];
@@ -170,6 +177,13 @@ PPSingletonM(AddressBookHandle)
         // 创建联系人模型
         PPPersonModel *model = [PPPersonModel new];
         model.name = name.length > 0 ? name : @"无名氏" ;
+        
+        if (name.length > 0) {
+            NSMutableString *mutableString = [NSMutableString stringWithString:name];
+            CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
+            NSString *pinyinString = [mutableString stringByFoldingWithOptions:NSDiacriticInsensitiveSearch locale:[NSLocale currentLocale]];
+            model.pinyin = pinyinString;
+        }
         
         // 联系人头像
         model.headerImage = [UIImage imageWithData:contact.thumbnailImageData];
